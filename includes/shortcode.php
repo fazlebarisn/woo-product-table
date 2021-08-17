@@ -93,7 +93,7 @@ if( !function_exists( 'wpt_shortcode_generator' ) ){
              */
             $product_type = isset( $basics['product_type'] ) && !empty( $basics['product_type'] ) ? $basics['product_type'] : false;
             if( $product_type ){
-                unset( $enabled_column_array['category'] );
+                ### unset( $enabled_column_array['category'] );
                 unset( $enabled_column_array['tags'] );
                 unset( $enabled_column_array['weight'] );
                 unset( $enabled_column_array['length'] );
@@ -384,7 +384,7 @@ if( !function_exists( 'wpt_shortcode_generator' ) ){
 
         /******************************************************************************/
 
-
+        
         if( $product_type ){
             $product_loop = new WP_Query($args);
             $product_includes = array();
@@ -416,19 +416,20 @@ if( !function_exists( 'wpt_shortcode_generator' ) ){
 
             wp_reset_query(); 
             //Unset some default here 
-            unset($args['tax_query']);
-            unset($args['tax_query']);
-            unset($wpt_permitted_td['attribute']);
-            unset($wpt_permitted_td['category']);
-            unset($wpt_permitted_td['tags']);
+//            unset($args['tax_query']);
+//            unset($args['tax_query']);
+//            unset($wpt_permitted_td['attribute']);
+//            unset($wpt_permitted_td['category']);
+//            unset($wpt_permitted_td['tags']);
+//
+//
+//            $args['post_type'] = array('product_variation'); //'product'
+//            $args['post__in'] = $product_includes;
+//            $args['orderby'] = 'post__in';
 
-
-            $args['post_type'] = array('product_variation'); //'product'
-            $args['post__in'] = $product_includes;
-            $args['orderby'] = 'post__in';
 
             //Set few default value for product variation
-            $search_box = false;
+            $search_box = true; ### false;
 
         }
         /****************************************************************************/
@@ -585,6 +586,33 @@ if( !function_exists( 'wpt_shortcode_generator' ) ){
         $html .= '<br class="wpt_clear">'; //Added @Version 2.0
         $html .= apply_filters('wpt_before_table', ''); //Apply Filter Jese Before Table Tag
 
+        
+$query = new WP_Query( array(
+    'post_type'       => 'product_variation',
+    'post_status'     => 'publish',
+    'posts_per_page'  => 100,
+    'post_parent__in' => wpt_get_variation_parent_ids_from_term( 'Hoodies', 'product_cat', 'name'),
+
+) );
+var_dump($query->post_count,$query, $args);
+
+        $args = array(
+    'post_type'       => 'product_variation',
+    'post_status'     => 'publish',
+    'posts_per_page'  => 100,
+            'table_ID' => 155,
+            'paged' => 1,
+    'post_parent__in' => array(15),//wpt_get_variation_parent_ids_from_term( 'Hoodiess', 'product_cat', 'name'),
+
+);
+        
+        
+        //$args['post_type'] = array( 'product_variation' );
+        //$args['post_parent__in'] = wpt_get_variation_parent_ids_from_term( 'Hoodies', 'product_cat', 'name');
+        //unset( $args['tax_query'] );
+        //unset( $args['meta_query'] );
+//        var_dump($product_type,$args);
+        
         /**
          * Why this array here, Actually we will send this data as dataAttribute of table 's tag.
          * although function has called at bellow where this array need.
@@ -918,9 +946,11 @@ if( !function_exists( 'wpt_table_row_generator' ) ){
         /**
          * Adding Filter for Args inside Row Generator
          */
+        var_dump($args);
         $args = apply_filters( 'wpto_table_query_args_in_row', $args, $table_ID, false, $column_settings, false, false );
-
+        var_dump($args);
         $product_loop = new WP_Query($args);
+        
         $product_loop = apply_filters( 'wpto_product_loop', $product_loop, $table_ID, $args );
         /**
          * If not set any Shorting (ASC/DESC) than Post loop will Random by Shuffle()
@@ -930,7 +960,7 @@ if( !function_exists( 'wpt_table_row_generator' ) ){
             shuffle($product_loop->posts);
         }
         $wpt_table_row_serial = (( $args['paged'] - 1) * $args['posts_per_page']) + 1; //For giving class id for each Row as well
-        if ( ( $product_loop->query['post_type'][0] == 'product_variation' && !empty( $product_loop->query['post__in']) && $product_loop->have_posts()) || ( $product_loop->query['post_type'][0] == 'product' && $product_loop->have_posts()) ) : while ($product_loop->have_posts()): $product_loop->the_post();
+        if (  $product_loop->have_posts() ) : while ($product_loop->have_posts()): $product_loop->the_post();
                 global $product;
 
                 $data = $product->get_data();

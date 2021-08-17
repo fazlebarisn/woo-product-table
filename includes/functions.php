@@ -37,6 +37,26 @@ if( !function_exists( 'wpt_column_setting_for_tax_cf' ) ){
 }
 add_filter( 'wpto_column_settings', 'wpt_column_setting_for_tax_cf', 10, 3 );
 
+if( ! function_exists( 'wpt_get_variation_parent_ids_from_term' ) ){
+    function wpt_get_variation_parent_ids_from_term( $term, $taxonomy, $type ){
+        global $wpdb;
+
+        return $wpdb->get_col( "
+            SELECT DISTINCT p.ID
+            FROM {$wpdb->prefix}posts as p
+            INNER JOIN {$wpdb->prefix}posts as p2 ON p2.post_parent = p.ID
+            INNER JOIN {$wpdb->prefix}term_relationships as tr ON p.ID = tr.object_id
+            INNER JOIN {$wpdb->prefix}term_taxonomy as tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+            INNER JOIN {$wpdb->prefix}terms as t ON tt.term_id = t.term_id
+            WHERE p.post_type = 'product'
+            AND p.post_status = 'publish'
+            AND p2.post_status = 'publish'
+            AND tt.taxonomy = '$taxonomy'
+            AND t.$type = '$term'
+        " );
+    }
+}
+
 if( !function_exists( 'wpt_detect_current_device' ) ){
     function wpt_detect_current_device(){
         $device = 'desktop';
