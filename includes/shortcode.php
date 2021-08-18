@@ -93,7 +93,7 @@ if( !function_exists( 'wpt_shortcode_generator' ) ){
              */
             $product_type = isset( $basics['product_type'] ) && !empty( $basics['product_type'] ) ? $basics['product_type'] : false;
             if( $product_type ){
-                ### unset( $enabled_column_array['category'] );
+                unset( $enabled_column_array['category'] );
                 unset( $enabled_column_array['tags'] );
                 unset( $enabled_column_array['weight'] );
                 unset( $enabled_column_array['length'] );
@@ -416,17 +416,16 @@ if( !function_exists( 'wpt_shortcode_generator' ) ){
 
             wp_reset_query(); 
             //Unset some default here 
-//            unset($args['tax_query']);
-//            unset($args['tax_query']);
-//            unset($wpt_permitted_td['attribute']);
-//            unset($wpt_permitted_td['category']);
-//            unset($wpt_permitted_td['tags']);
-//
-//
-//            $args['post_type'] = array('product_variation'); //'product'
-//            $args['post__in'] = $product_includes;
-//            $args['orderby'] = 'post__in';
+            unset($args['tax_query']);
+            unset($args['tax_query']);
+            unset($wpt_permitted_td['attribute']);
+            unset($wpt_permitted_td['category']);
+            unset($wpt_permitted_td['tags']);
 
+
+            $args['post_type'] = array('product_variation'); //'product'
+            $args['post__in'] = $product_includes;
+            $args['orderby'] = 'post__in';
 
             //Set few default value for product variation
             $search_box = true; ### false;
@@ -550,13 +549,16 @@ if( !function_exists( 'wpt_shortcode_generator' ) ){
         $html .= ob_get_clean();
 
         $html .= ($minicart_position == 'top' ? $table_minicart_message_box : false);//$minicart_position //"<div class='tables_cart_message_box_{$temp_number}'></div>";
-
+        
+        
+        
         /**
          * Searchbox Validation Filter added.
          * By default: we set that
          * Table will show only at Page
          */
         $search_box_validation = apply_filters( 'wpto_searchbox_show', true, $table_ID, $args, $column_settings, $enabled_column_array, $config_value, $atts );
+        $search_box = $search_box_validation = true;        
         //Search Box Hander Here
         if( $search_box && $search_box_validation ){
             /**
@@ -586,25 +588,20 @@ if( !function_exists( 'wpt_shortcode_generator' ) ){
         $html .= '<br class="wpt_clear">'; //Added @Version 2.0
         $html .= apply_filters('wpt_before_table', ''); //Apply Filter Jese Before Table Tag
 
-        
-$query = new WP_Query( array(
-    'post_type'       => 'product_variation',
-    'post_status'     => 'publish',
-    'posts_per_page'  => 100,
-    'post_parent__in' => wpt_get_variation_parent_ids_from_term( 'Hoodies', 'product_cat', 'name'),
-
-) );
-var_dump($query->post_count,$query, $args);
-
-        $args = array(
+   
+$new_args = array(
     'post_type'       => 'product_variation',
     'post_status'     => 'publish',
     'posts_per_page'  => 100,
             'table_ID' => 155,
             'paged' => 1,
-    'post_parent__in' => array(15),//wpt_get_variation_parent_ids_from_term( 'Hoodiess', 'product_cat', 'name'),
+    'post_parent__in' => wpt_get_variation_parent_ids_from_term( 18, 'product_cat', 'id'),//wpt_get_variation_parent_ids_from_term( 'Hoodiess', 'product_cat', 'name'),
 
 );
+$query = new WP_Query( $new_args );
+var_dump($query->post_count,$query, $args);
+
+        $args = $new_args;
         
         
         //$args['post_type'] = array( 'product_variation' );
