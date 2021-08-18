@@ -63,7 +63,7 @@ if( ! function_exists( 'wpt_get_variation_parent_ids_from_term' ) ){
                 AND t.$type = '$term'
                 " );
                 if( !is_array($s_result) ) continue;
-                array_merge($results, $s_result );
+                $results = array_merge($results, $s_result );
             }
             
         }

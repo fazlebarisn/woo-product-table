@@ -219,6 +219,36 @@ if( !function_exists( 'wpt_ajax_table_row_load' ) ){
         $load_type = ( isset( $data['load_type'] ) && $data['load_type'] == 'current_page' ? true : false );
 
         $args = $targetTableArgs['args'];
+        
+        
+        
+        
+        $new_args = array(
+    'post_type'       => 'product_variation',
+    'post_status'     => 'publish',
+    'posts_per_page'  => 100,
+            'table_ID' => 1234,
+            'paged' => 1,
+    'post_parent__in' => [],//wpt_get_variation_parent_ids_from_term( $product_cat_ids, 'product_cat', 'term_id'),//wpt_get_variation_parent_ids_from_term( 'Hoodiess', 'product_cat', 'name'),
+
+);
+var_dump($product_cat_ids);
+if( isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) && count( $args['tax_query'] ) > 0 ){
+    $new_args['post_parent__in'] = wpt_get_variation_parent_ids_from_term( $args['tax_query']);
+}
+
+
+        $args = $new_args;
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         $args['wpt_query_type'] = 'search';//Added on 6.0.3 - 12.6.2020
 
         $table_ID = $args['table_ID'];

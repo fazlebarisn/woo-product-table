@@ -593,7 +593,7 @@ $new_args = array(
     'post_type'       => 'product_variation',
     'post_status'     => 'publish',
     'posts_per_page'  => 100,
-            'table_ID' => 78,
+            'table_ID' => $temp_number,
             'paged' => 1,
     'post_parent__in' => [],//wpt_get_variation_parent_ids_from_term( $product_cat_ids, 'product_cat', 'term_id'),//wpt_get_variation_parent_ids_from_term( 'Hoodiess', 'product_cat', 'name'),
 
