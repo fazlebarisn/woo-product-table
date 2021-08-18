@@ -605,7 +605,7 @@ if( isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) && count( $arg
 $query = new WP_Query( $new_args );
 // var_dump($query->post_count,$query, $args);
 
-        $args = $new_args;
+        // $args = $new_args;
         
         var_dump($args);
         //$args['post_type'] = array( 'product_variation' );

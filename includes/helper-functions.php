@@ -224,18 +224,19 @@ if( !function_exists( 'wpt_ajax_table_row_load' ) ){
         
         
         $new_args = array(
-    'post_type'       => 'product_variation',
-    'post_status'     => 'publish',
-    'posts_per_page'  => 100,
-            'table_ID' => 1234,
-            'paged' => 1,
-    'post_parent__in' => [],//wpt_get_variation_parent_ids_from_term( $product_cat_ids, 'product_cat', 'term_id'),//wpt_get_variation_parent_ids_from_term( 'Hoodiess', 'product_cat', 'name'),
+            'post_type'       => 'product_variation',
+            'post_status'     => 'publish',
+            'posts_per_page'  => 100,
+                    'table_ID' => 1234,
+                    'paged' => 1,
+            'post_parent__in' => [],//wpt_get_variation_parent_ids_from_term( $product_cat_ids, 'product_cat', 'term_id'),//wpt_get_variation_parent_ids_from_term( 'Hoodiess', 'product_cat', 'name'),
 
-);
-var_dump($product_cat_ids);
-if( isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) && count( $args['tax_query'] ) > 0 ){
-    $new_args['post_parent__in'] = wpt_get_variation_parent_ids_from_term( $args['tax_query']);
-}
+        );
+        
+        // var_dump($product_cat_ids);
+        if( isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) && count( $args['tax_query'] ) > 0 ){
+            $new_args['post_parent__in'] = wpt_get_variation_parent_ids_from_term( $args['tax_query']);
+        }
 
 
         $args = $new_args;
