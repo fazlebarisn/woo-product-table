@@ -588,18 +588,18 @@ if( !function_exists( 'wpt_shortcode_generator' ) ){
         $html .= '<br class="wpt_clear">'; //Added @Version 2.0
         $html .= apply_filters('wpt_before_table', ''); //Apply Filter Jese Before Table Tag
 
-   
+//    var_dump(wpt_get_variation_parent_ids_from_term( [18, 19], 'product_cat', 'term_id'));
 $new_args = array(
     'post_type'       => 'product_variation',
     'post_status'     => 'publish',
     'posts_per_page'  => 100,
-            'table_ID' => 155,
+            'table_ID' => 78,
             'paged' => 1,
-    'post_parent__in' => wpt_get_variation_parent_ids_from_term( 18, 'product_cat', 'id'),//wpt_get_variation_parent_ids_from_term( 'Hoodiess', 'product_cat', 'name'),
+    'post_parent__in' => wpt_get_variation_parent_ids_from_term( [18, 19], 'product_cat', 'term_id'),//wpt_get_variation_parent_ids_from_term( 'Hoodiess', 'product_cat', 'name'),
 
 );
 $query = new WP_Query( $new_args );
-var_dump($query->post_count,$query, $args);
+// var_dump($query->post_count,$query, $args);
 
         $args = $new_args;
         
@@ -943,9 +943,9 @@ if( !function_exists( 'wpt_table_row_generator' ) ){
         /**
          * Adding Filter for Args inside Row Generator
          */
-        var_dump($args);
+        // var_dump($args);
         $args = apply_filters( 'wpto_table_query_args_in_row', $args, $table_ID, false, $column_settings, false, false );
-        var_dump($args);
+        // var_dump($args);
         $product_loop = new WP_Query($args);
         
         $product_loop = apply_filters( 'wpto_product_loop', $product_loop, $table_ID, $args );

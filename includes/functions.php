@@ -38,10 +38,11 @@ if( !function_exists( 'wpt_column_setting_for_tax_cf' ) ){
 add_filter( 'wpto_column_settings', 'wpt_column_setting_for_tax_cf', 10, 3 );
 
 if( ! function_exists( 'wpt_get_variation_parent_ids_from_term' ) ){
-    function wpt_get_variation_parent_ids_from_term( $term, $taxonomy, $type ){
+    function wpt_get_variation_parent_ids_from_term( $terms, $taxonomy, $type ){
         global $wpdb;
-
-        return $wpdb->get_col( "
+        $prepare = array();
+        foreach( $terms as $term ){
+            $results = $wpdb->get_col( "
             SELECT DISTINCT p.ID
             FROM {$wpdb->prefix}posts as p
             INNER JOIN {$wpdb->prefix}posts as p2 ON p2.post_parent = p.ID
@@ -53,7 +54,15 @@ if( ! function_exists( 'wpt_get_variation_parent_ids_from_term' ) ){
             AND p2.post_status = 'publish'
             AND tt.taxonomy = '$taxonomy'
             AND t.$type = '$term'
-        " );
+            " );
+            
+            foreach( $results as $item ){
+                $prepare[] = $item;
+            }
+        }
+
+    // var_dump($prepare);
+        return $prepare;
     }
 }
 
