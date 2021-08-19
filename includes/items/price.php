@@ -2,7 +2,21 @@
 $wpt_single_price = false;
 //$wpt_single_price .= "<td class='wpt_for_product_action wpt_price'  id='price_value_id_" . $data['id'] . "' data-price_html='" . esc_attr( $product->get_price_html() ) . "'> ";
 $wpt_single_price .= '<span class="wpt_product_price">';
-$wpt_single_price .= $product->get_price_html(); //Here was woocommerce_template_loop_price() at version 1.0
+
+if( $product->is_type( 'variable' ) ){
+    $available_variations = $product->get_available_variations();
+    
+    foreach( $available_variations as $variation ){
+
+        if( $variation['variation_id'] == get_the_ID() ){
+            $wpt_single_price = $variation['price_html'];
+        }
+
+    }
+
+}else{
+    $wpt_single_price .= $product->get_price_html(); //Here was woocommerce_template_loop_price() at version 1.0
+}
 $wpt_single_price .= '</span>';
 //$wpt_single_price .= " </td>";
 //var_dump($product->get_price());
