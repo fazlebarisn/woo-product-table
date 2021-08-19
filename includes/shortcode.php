@@ -1089,7 +1089,7 @@ if( !function_exists( 'wpt_table_row_generator' ) ){
                                 <td colspan="6">
                                     <table>
                             <?php
-                            while ($variation_loop->have_posts()) : 
+                            while( $variation_loop->have_posts() ) : 
                                 $variation_loop->the_post();
                                 include $row_manager_variation_loc;
                                 

@@ -1,5 +1,17 @@
 <?php
 echo wc_get_stock_html( $product );
+if( $product->is_type( 'variable' ) ){
+    $available_variations = $product->get_available_variations();
+    
+    foreach( $available_variations as $variation ){
+
+        if( $variation['variation_id'] == get_the_ID() ){
+            echo $variation['availability_html'];
+        }
+
+    }
+
+}
 /*
 $stock_status_message = $stock_status_message = $config_value['table_out_of_stock'];
 if( $data['stock_status'] == 'instock' ){
