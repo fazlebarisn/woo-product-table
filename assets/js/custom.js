@@ -1338,6 +1338,7 @@
                     targetTableArgs.args.tax_query[key] =targetTableArgsBackup.args.tax_query[key];
                 } 
             });
+            console.log(targetTableArgs,final_taxomony);
             if(Object.keys(texonomies).length > 0){
                 Object.assign(targetTableArgs.args.tax_query,final_taxomony);
             }else{
