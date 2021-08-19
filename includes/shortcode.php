@@ -953,7 +953,7 @@ if( !function_exists( 'wpt_table_row_generator' ) ){
         $args = apply_filters( 'wpto_table_query_args_in_row', $args, $table_ID, false, $column_settings, false, false );
         //var_dump($args['tax_query'],isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) && count( $args['tax_query'] ) > 0 );
         $args['post_parent__in'] = array();
-        $args['post_type'] = 'product_variation';
+        $args['post_type'] = ['product'];
         if( isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) && count( $args['tax_query'] ) > 0 ){
             $args['post_parent__in'] = wpt_get_variation_parent_ids_from_term( $args['tax_query']);
            
@@ -973,6 +973,7 @@ if( !function_exists( 'wpt_table_row_generator' ) ){
         if ($sort == 'random') {
             shuffle($product_loop->posts);
         }
+        $personal_counter = 0;
         $wpt_table_row_serial = (( $args['paged'] - 1) * $args['posts_per_page']) + 1; //For giving class id for each Row as well
         if (  $product_loop->have_posts() ) : while ($product_loop->have_posts()): $product_loop->the_post();
                 global $product;
@@ -1072,10 +1073,41 @@ if( !function_exists( 'wpt_table_row_generator' ) ){
 
                 do_action( 'wpto_before_row', $column_settings, $table_ID, $product, $temp_number );
                 $row_manager_loc = WPT_BASE_DIR . 'includes/row_manager.php';
+                $row_manager_variation_loc = WPT_BASE_DIR . 'includes/row_manager_variations.php';
                 $row_manager_loc = apply_filters( 'wpo_row_manager_loc',$row_manager_loc, $column_settings,$table_column_keywords, $args, $table_ID, $product );
-                if( file_exists( $row_manager_loc ) ){
+                if( file_exists( $row_manager_loc )  ){
                     include $row_manager_loc;
                 }
+                if( file_exists( $row_manager_variation_loc )  ){
+                    if( $product->get_type() == 'variable' ){
+                        $args['post_type'] = 'product_variation';
+                        $args['post_parent__in'] = array( $product->get_id() );
+                        $variation_loop = new WP_Query($args);
+                        if (  $variation_loop->have_posts() ) : 
+                            ?>
+                            <tr class="new_rows">
+                                <td colspan="6">
+                                    <table>
+                            <?php
+                            while ($variation_loop->have_posts()) : 
+                                $variation_loop->the_post();
+                                include $row_manager_variation_loc;
+                                
+                            endwhile;
+                            ?>
+                                    </table>
+                                </td>    
+                            </tr>
+                            <?php
+                        endif;
+                        // echo do_shortcode('[Product_Table id="'. $temp_number .'" post_type="product_variation" post_parent__in="'. $product->get_id() .'"]');
+
+                        
+
+                        
+                    }
+                }
+
                 do_action( 'wpto_after_row', $column_settings, $table_ID, $product, $temp_number );
 
                 $wpt_table_row_serial++; //Increasing Serial Number.
