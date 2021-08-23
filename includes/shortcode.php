@@ -587,34 +587,19 @@ if( !function_exists( 'wpt_shortcode_generator' ) ){
         $html .= $html_check; //Added at @Version 1.0.4
         $html .= '<br class="wpt_clear">'; //Added @Version 2.0
         $html .= apply_filters('wpt_before_table', ''); //Apply Filter Jese Before Table Tag
-        //var_dump($args);
-//    var_dump(wpt_get_variation_parent_ids_from_term( $args['tax_query'], 'term_id'));
-//$new_args = array(
-//    'post_type'       => 'product_variation',
-//    'post_status'     => 'publish',
-//    'posts_per_page'  => 100,
-//            'table_ID' => $temp_number,
-//            'paged' => 1,
-//    'post_parent__in' => [],//wpt_get_variation_parent_ids_from_term( $product_cat_ids, 'product_cat', 'term_id'),//wpt_get_variation_parent_ids_from_term( 'Hoodiess', 'product_cat', 'name'),
-//
-//);
-//var_dump($args['tax_query']);
         
-//        $args['post_type'] = 'product_variation';
-//if( isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) && count( $args['tax_query'] ) > 0 ){
-//    $args['post_parent__in'] = wpt_get_variation_parent_ids_from_term( $args['tax_query']);
-//    $args['tax_query'] = array();
-//}
-//$query = new WP_Query( $new_args );
-// var_dump($query->post_count,$query, $args);
+        $args['post_parent__in'] = array();
+        $args['post_type'] = 'product_variation';
+        if( isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) && count( $args['tax_query'] ) > 0 ){
+            $args['post_parent__in'] = wpt_get_variation_parent_ids_from_term( $args['tax_query']);
+           
+        } 
 
-// var_dump($args);       
-        
-        //$args['post_type'] = array( 'product_variation' );
-        //$args['post_parent__in'] = wpt_get_variation_parent_ids_from_term( 'Hoodies', 'product_cat', 'name');
-        //unset( $args['tax_query'] );
-        //unset( $args['meta_query'] );
-//        var_dump($product_type,$args);
+        if( ! empty( $args['post_parent__in'] ) ){
+            unset($args['tax_query']['product_cat_IN']);
+            unset($args['tax_query']['product_tag_IN']);
+            //$args['tax_query'] = array();
+        }
         
         /**
          * Why this array here, Actually we will send this data as dataAttribute of table 's tag.
@@ -952,16 +937,9 @@ if( !function_exists( 'wpt_table_row_generator' ) ){
         // var_dump($args);
         $args = apply_filters( 'wpto_table_query_args_in_row', $args, $table_ID, false, $column_settings, false, false );
         //var_dump($args['tax_query'],isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) && count( $args['tax_query'] ) > 0 );
-        $args['post_parent__in'] = array();
-        $args['post_type'] = 'product_variation';
-        if( isset( $args['tax_query'] ) && is_array( $args['tax_query'] ) && count( $args['tax_query'] ) > 0 ){
-            $args['post_parent__in'] = wpt_get_variation_parent_ids_from_term( $args['tax_query']);
-           
-        } 
-        if( ! empty( $args['post_parent__in'] ) ){
-            $args['tax_query'] = array();
-        }
-        //var_dump($args);
+        
+        
+//        var_dump($args);
         
         $product_loop = new WP_Query($args);
         
