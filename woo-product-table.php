@@ -452,7 +452,7 @@ class WPT_Product_Table{
             $configuration_page = '<a target="_blank" href="' . esc_url( admin_url( 'edit.php?post_type=wpt_product_table&page=woo-product-table-config' ) ) . '">' . esc_html__( 'Configure Page', 'wpt_pro' ) . '</a>';
             $message = sprintf(
                    /* translators: 1: Plugin name 2: WooPrdouct Table */
-                   esc_html__( '"%1$s" recomends "%2$s" to be activated. To hide this notification, Go to %3$s (Plugin Recommendation).', 'wpt_pro' ),
+                   esc_html__( '"%1$s" recommends "%2$s" to be activated. To hide this notification, Go to %3$s (Plugin Recommendation).', 'wpt_pro' ),
                    '<strong>' . esc_html__( 'Woo Product Table', 'wpt_pro' ) . '</strong>',
                     $link_text,
                     $configuration_page
